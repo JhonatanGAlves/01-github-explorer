@@ -16,7 +16,7 @@ module.exports = {
   devtool: isDevelopment ? 'eval-source-map' : 'source-map',
   // No windows, esse tipo de / é dessa forma \, logo, o usar o diretório 'src/index.jsx' daria problema no windows por conta da /.
   // Por isso é utilizado da forma abaixo.
-  entry: path.resolve(__dirname, 'src', 'index.jsx'), //__dirname == o caminho que o arquio webpack está localizado no seu projeto.
+  entry: path.resolve(__dirname, 'src', 'index.tsx'), //__dirname == o caminho que o arquio webpack está localizado no seu projeto.
   // O objeto abaixo está referenciando o arquivo convertido que é interpretado pelo browser.
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -25,7 +25,7 @@ module.exports = {
   //
   resolve: {
     // Por padrão, o webpack só le aquivos js, então é necessário passar um array com as extensões a ser lidas.
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   /* Estou referenciando para o dev server o caminho para o meu arquivo estático, no caso, o index.html, dessa forma é automatizado o processo de conversão. Sendo assim, não à mais necessidade de rodar toda vez o yarn webpack quando a aplicação sofrer alterações, basta dar um yarn webpack server. */ 
   devServer: {
@@ -47,7 +47,7 @@ module.exports = {
     rules: [
       {
         // Para referenciar os arquivos, foi utilizado expressões regulares (Regex).
-        test: /\.jsx/,
+        test: /\.(j|t)sx/,
         exclude: /node_module/,
         use: {
           loader: 'babel-loader',
