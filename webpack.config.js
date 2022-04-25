@@ -1,6 +1,8 @@
-//Como o webpack roda dentro do node, tem que ser usado o require.
+// Como o webpack roda dentro do node, tem que ser usado o require.
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// Para usar o Fast Refresh => yarn add -D @pmmmwh/react-refresh-webpack-plugin react-refresh
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 /* NODE_ENV é uma varável que precisa ser criada dentro de process.env que é onde são declarado as variáveis de ambiente, para através desta variável eu consigo configurar algo baseado no ambiente da minha aplicação. Nesse caso, quero configurar se a aplicação está em ambiente de desenvolvimento ou de produção. */
 
@@ -27,14 +29,18 @@ module.exports = {
   },
   /* Estou referenciando para o dev server o caminho para o meu arquivo estático, no caso, o index.html, dessa forma é automatizado o processo de conversão. Sendo assim, não à mais necessidade de rodar toda vez o yarn webpack quando a aplicação sofrer alterações, basta dar um yarn webpack server. */ 
   devServer: {
-    static: path.resolve(__dirname, 'public')
+    static: path.resolve(__dirname, 'public'),
+    // Faz parte do ReactRefreshWebpackPlugin
+    hot: true
   },
   // Está dizendo qual template HTML o webpack tem que seguir.
   plugins: [
+    /* ReactRefreshWebpackPlugin() serve para as variáveis de estado não resetar o seu valor quando a página sofrer relaod. Mas isso somente em ambiente de desenvolvimento. */
+    isDevelopment && new ReactRefreshWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html')
     })
-  ],
+  ].filter(Boolean), // Plugins não pode retornar um boolean, então é feito isso pra ele filtrar e excluir algum boolean
   // Module é responsável por ditar quais extensões será tratada de tal.
   module: {
     /* A regra abaixo diz o seguinte, encontre arquivos .jsx que estou tentando importar e exclua de node module utilizando o babel-loader (faz a ligação entre o babel e webpack. Ele converte o arquivo que está sendo importado para uma maneira em que o browser consiga interpretar, utilizando o babel. No caso do CSS, utilizando o style-loader e css-loader em conjunto (ambos precisam ser instalados => yarn add style-loader css-loader -D)) */
@@ -43,7 +49,16 @@ module.exports = {
         // Para referenciar os arquivos, foi utilizado expressões regulares (Regex).
         test: /\.jsx/,
         exclude: /node_module/,
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // Faz parte do ReactRefreshWebpackPlugin
+            plugins: [
+              isDevelopment && require.resolve('react-refresh/babel')
+            ].filter(Boolean)
+          }
+
+        }
       },
       {
         test: /\.scss/,
