@@ -1,0 +1,32 @@
+section.repository-list {
+  margin: 40px;
+
+  h1 {
+    margin-bottom: 16px;
+  }
+
+  ul {
+    list-style: none;
+
+    li {
+
+      // Toda li, que antes dela tem uma li também, será aplicado um margin-top. Nesse caso o primeiro li não recebe margin-top.
+      &+li {
+        margin-top: 20px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #ccc;
+        margin-top: 8px;
+      }
+
+      a {
+        display: inline-block;
+        margin-top: 16px;
+        text-decoration: none;
+        color: rgb(255, 145, 0);
+      }
+    }
+  }
+}
