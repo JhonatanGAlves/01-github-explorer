@@ -2,12 +2,18 @@ import { useState, useEffect } from "react"
 import RepositoryItem from "./RepositoryItem"
 import '../styles/repositories.scss'
 
+type Repository = {
+  id: string
+  name: string
+  description: string
+  url: string
+}
+
 const RepositoryList = () => {
-  const [repositories, setRepositories] = useState([])
-  const BASE_URL = "https://api.github.com/orgs/rocketseat/repos"
+  const [repositories, setRepositories] = useState<Repository[]>([])
 
   useEffect(() => {
-    fetch(BASE_URL)
+    fetch("https://api.github.com/orgs/rocketseat/repos")
       .then(response => response.json())
       .then(data => setRepositories(data))
   }, [])

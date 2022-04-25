@@ -1,9 +1,17 @@
 import React from 'react'
 
-const RepositoryItem = (props) => {
+type RepositoryItemProps = {
+  repository: {
+    name: string
+    description: string
+    url: string
+  }
+}
+
+const RepositoryItem = (props: RepositoryItemProps) => {
   return (
     <li>
-      <strong>{props.repository.name ?? 'default'}</strong>
+      <strong>{props.repository.name}</strong>
       <p>{props.repository.description}</p>
 
       <a href={props.repository.url}>
